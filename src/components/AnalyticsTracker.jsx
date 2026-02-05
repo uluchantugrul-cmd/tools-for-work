@@ -10,8 +10,8 @@ import { useLocation } from 'react-router-dom';
 //    Get your Project ID (a short string) and paste it below.
 // ------------------------------------------------------------------
 
-const GA_ID = 'G-XXXXXXXXXX';       // Örnek: 'G-123456789'
-const CLARITY_ID = '';              // Örnek: 'l1r2j3k4'
+const GA_ID = 'G-G1CJWH1KVC';
+const CLARITY_ID = 'vcnb2ln7pk';
 
 const AnalyticsTracker = () => {
     const location = useLocation();
