@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera } from 'lucide-react';
+import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = ({ onHome, onBlog, activePath }) => {
@@ -138,6 +138,12 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                                 <div onClick={() => handleToolSelect('/image')} className="dropdown-item">
                                     <Camera size={18} className="text-pink-500" /> Pixel Studio
                                 </div>
+                                <div onClick={() => handleToolSelect('/utm')} className="dropdown-item">
+                                    <Megaphone size={18} className="text-orange-400" /> UTM Architect
+                                </div>
+                                <div onClick={() => handleToolSelect('/markdown')} className="dropdown-item">
+                                    <FileText size={18} className="text-sky-400" /> Markdown Pro
+                                </div>
                             </div>
                         )}
                     </div>
@@ -179,6 +185,8 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                         <button onClick={() => handleToolSelect('/qr')} className="mobile-item"><QrCode size={20} /> Smart QR Studio</button>
                         <button onClick={() => handleToolSelect('/converter')} className="mobile-item"><FileCode size={20} /> converter</button>
                         <button onClick={() => handleToolSelect('/image')} className="mobile-item"><Camera size={20} /> Pixel Studio</button>
+                        <button onClick={() => handleToolSelect('/utm')} className="mobile-item"><Megaphone size={20} /> UTM Architect</button>
+                        <button onClick={() => handleToolSelect('/markdown')} className="mobile-item"><FileText size={20} /> Markdown Pro</button>
 
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
 

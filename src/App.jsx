@@ -11,6 +11,8 @@ import ImageTool from './components/ImageTool';
 import Legal from './components/Legal';
 import StrategyMatrix from './components/StrategyMatrix';
 import DevToolkit from './components/DevToolkit';
+import UTMTool from './components/UTMTool';
+import MarkdownTool from './components/MarkdownTool';
 import About from './components/About';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
@@ -40,6 +42,8 @@ function App() {
                         <Route path="/qr" element={<QRToolWrapper />} />
                         <Route path="/image" element={<ImageToolWrapper />} />
                         <Route path="/forge" element={<DevToolkitWrapper />} />
+                        <Route path="/utm" element={<UTMToolWrapper />} />
+                        <Route path="/markdown" element={<MarkdownWrapper />} />
                         <Route path="/guides" element={<BlogWrapper />} />
                         <Route path="/about" element={<AboutWrapper />} />
                         <Route path="/privacy" element={<LegalWrapper type="privacy" />} />
@@ -100,6 +104,16 @@ const DevToolkitWrapper = () => {
     return <DevToolkit onBack={() => navigate('/')} />;
 };
 
+const UTMToolWrapper = () => {
+    const navigate = useNavigate();
+    return <UTMTool onBack={() => navigate('/')} />;
+};
+
+const MarkdownWrapper = () => {
+    const navigate = useNavigate();
+    return <MarkdownTool onBack={() => navigate('/')} />;
+};
+
 const BlogWrapper = () => {
     const navigate = useNavigate();
     return <Blog onBack={() => navigate('/')} onNavigateTool={(id) => navigate(id === 'menu' ? '/' : `/${id}`)} />;
@@ -136,6 +150,8 @@ const Footer = () => {
                         <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '1rem' }}>
                             <li style={{ marginBottom: '16px' }}><Link to="/gantt" className="footer-link">Gantt Chart Pro</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/workload" className="footer-link">Workload Planner</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/utm" className="footer-link">UTM Architect</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/markdown" className="footer-link">Markdown Pro</Link></li>
                         </ul>
                     </div>
                     <div>

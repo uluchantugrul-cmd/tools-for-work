@@ -9,6 +9,49 @@ const Blog = ({ onBack, onNavigateTool }) => {
 
     const articles = [
         {
+            id: 1101,
+            title: "UTM Architect: The Science of Traffic Attribution",
+            category: "Marketing",
+            date: "Feb 05, 2025",
+            readTime: "9 min read",
+            excerpt: "Stop guessing where your users come from. Learn how to build a bulletproof attribution strategy using UTM parameters and global analytics.",
+            content: `
+                <h2>Attribution is the Key to ROI</h2>
+                <p>If you don't know which campaign drove a sale, you're effectively flying blind. Traffic attribution is the process of identifying which marketing channels, ads, or links resulted in a user action. The industry standard for this is UTM (Urchin Tracking Module) parameters.</p>
+                
+                <h2>The 5 Pillars of UTM Tracking</h2>
+                <p>A perfect tracking link uses five core parameters. Our <a href="#" data-tool="utm">UTM Architect</a> tool helps you build these without syntax errors:</p>
+                <ul>
+                    <li><strong>Source:</strong> The platform (e.g., twitter, linkedin).</li>
+                    <li><strong>Medium:</strong> The category (e.g., cpc, organic, email).</li>
+                    <li><strong>Campaign:</strong> The strategic name (e.g., product_launch_2025).</li>
+                    <li><strong>Term:</strong> Used for paid keywords.</li>
+                    <li><strong>Content:</strong> To differentiate version (e.g., A/B testing variations).</li>
+                </ul>
+                
+                <h2>Strategy: The Lowercase Rule</h2>
+                <p>Google Analytics is case-sensitive. If you use "Email" in one link and "email" in another, they will appear as two separate rows in your reports. Modern teams use our UTM Architect to enforce a consistent, lowercase-only naming convention across the organization.</p>
+            `
+        },
+        {
+            id: 1102,
+            title: "Beyond Notepad: Why Engineers Prefer Markdown Pro",
+            category: "Engineering",
+            date: "Feb 05, 2025",
+            readTime: "10 min read",
+            excerpt: "Documentation is the most underrated engineering skill. Discover how a distraction-free Markdown environment can improve your technical writing flow.",
+            content: `
+                <h2>The Power of Structured Text</h2>
+                <p>Markdown is the lingua franca of technical communication. From GitHub README files to large documentation sites, its simplicity allows engineers to focus on content rather than styling. However, a standard text editor lacks the visual feedback needed for complex layouts.</p>
+                
+                <h2>The Flow State Workspace</h2>
+                <p>Our <a href="#" data-tool="markdown">Markdown Pro</a> editor is designed to minimize friction. By providing a live-preview side-by-side with your code, it allows you to see exactly how your headers, code blocks, and lists will render in real-time.</p>
+                
+                <h2>Security in Documentation</h2>
+                <p>Many online markdown editors sync your drafts to a cloud database. For proprietary system architectures or internal project requirements, this is a security risk. Markdown Pro is local-first. Your drafts are stored in your browser's LocalStorage and never touch our servers. This ensures your technical specifications remain private.</p>
+            `
+        },
+        {
             id: 101,
             title: "Why Local-First Dev Tools Are Safer: A Security Deep Dive",
             category: "Engineering",
