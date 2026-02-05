@@ -31,19 +31,29 @@ const MarkdownTool = ({ onBack }) => {
         setTimeout(() => setSaved(false), 2000);
     };
 
-    // Simple markdown renderer for preview (doesn't need complex libs for this use case)
+    // Safer markdown renderer for preview
     const renderSimpleMarkdown = (text) => {
-        return text
+        if (!text) return '';
+
+        // 1. Escape basic HTML to prevent XSS
+        let html = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        // 2. Process Markdown syntax
+        return html
             .replace(/^# (.*$)/gim, '<h1>$1</h1>')
             .replace(/^## (.*$)/gim, '<h2>$1</h2>')
             .replace(/^### (.*$)/gim, '<h3>$1</h3>')
             .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>')
-            .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-            .replace(/\*(.*)\*/gim, '<em>$1</em>')
-            .replace(/!\[(.*?)\]\((.*?)\)/gim, "<img alt='$1' src='$2' style='max-width:100%' />")
-            .replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2' target='_blank'>$1</a>")
-            .replace(/\n$/gim, '<br />')
-            .split('\n').join('<br />');
+            .replace(/\*\*\*(.*?)\*\*\*/gim, '<strong><em>$1</em></strong>')
+            .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+            .replace(/`([^`]+)`/gim, '<code>$1</code>')
+            .replace(/!\[(.*?)\]\((.*?)\)/gim, "<img alt='$1' src='$2' style='max-width:100%; border-radius: 8px;' />")
+            .replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2' target='_blank' rel='noopener noreferrer'>$1</a>")
+            .replace(/\n/gim, '<br />');
     };
 
     return (

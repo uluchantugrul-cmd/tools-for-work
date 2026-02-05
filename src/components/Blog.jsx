@@ -9,6 +9,42 @@ const Blog = ({ onBack, onNavigateTool }) => {
 
     const articles = [
         {
+            id: 1103,
+            title: "Deep Work vs. Burnout: The Pomodoro Defense",
+            category: "Productivity",
+            date: "Feb 05, 2025",
+            readTime: "11 min read",
+            excerpt: "Learn how to use Pomodoro cycles not just for time management, but as a mental defense mechanism against digital exhaustion.",
+            content: `
+                <h2>The Myth of the 8-Hour Focus</h2>
+                <p>Human cognition wasn't designed for 8 hours of continuous, high-intensity focus. After approximately 90 minutes of brain work, our mental energy peaks and then begins a sharp decline. Pushing through this decline doesn't result in more work; it results in lower quality work and eventual burnout.</p>
+                
+                <h2>The 25-5 Rhythm</h2>
+                <p>Our <a href="#" data-tool="pomodoro">Pomodoro Tracker</a> is built on the proven 25/5 rhythm. By working in 25-minute "sprints" followed by 5-minute "relief" breaks, you allow your brain to clear its cache. This prevents the accumulation of mental fatigue and keeps you in the 'flow zone' for much longer.</p>
+                
+                <h2>Why Project Tracking Matters</h2>
+                <p>A simple timer isn't enough. To truly optimize your day, you need to know <em>where</em> your focus went. By linking your Pomodoro sessions to specific projects, you gain data-driven insights. Are you spending 10 pomodoros on email but only 2 on actual coding? This visual feedback is the first step to behavioral change.</p>
+            `
+        },
+        {
+            id: 1104,
+            title: "Global Sync: Navigating the Time Zone Trap",
+            category: "Management",
+            date: "Feb 05, 2025",
+            readTime: "13 min read",
+            excerpt: "Working in a global team is a superpower, but time zones are its kryptonite. Learn the architecture of a perfect sync strategy.",
+            content: `
+                <h2>The Cost of 'When are you?'</h2>
+                <p>In a distributed team, the question "When can we meet?" often leads to endless Slack threads and calendar gymnastics. This friction adds up, causing delays in decision-making and isolation for team members in fringe time zones.</p>
+                
+                <h2>The Visual Overlap Solution</h2>
+                <p>Traditional calendars are bad at showing <em>müsaitlik</em> (availability) across a dozen locations. This is why we built the <a href="#" data-tool="availability">Team Sync Matrix</a>. Instead of 12 separate calendars, it provides a single, unified grid. By mapping everyone's 9-to-5 window relative to your current location, the 'Golden Hours' for meeting become instantly obvious.</p>
+                
+                <h2>Async-First, Sync-Optional</h2>
+                <p>The goal of finding common meeting slots isn't to have more meetings—it's to have better ones. By identifying when everyone is available, you can reserve that precious overlap for high-bandwidth collaboration, leaving the rest of the day for deep, asynchronous work.</p>
+            `
+        },
+        {
             id: 1101,
             title: "UTM Architect: The Science of Traffic Attribution",
             category: "Marketing",

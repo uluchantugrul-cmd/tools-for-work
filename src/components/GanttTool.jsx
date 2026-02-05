@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, FileDown, ArrowLeft, Calendar, AlertCircle, ChevronRight, ChevronDown, Check, HelpCircle, Target, Info, Search, Filter } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { format, differenceInDays, addDays, startOfDay, isToday, isWithinInterval } from 'date-fns';
+import { robustParseDate } from '../utils/helpers';
 
 const GanttTool = ({ onBack }) => {
     const [data, setData] = useState(null);
@@ -17,14 +18,6 @@ const GanttTool = ({ onBack }) => {
             ...prev,
             [taskName]: !prev[taskName]
         }));
-    };
-
-    const parseExcelDate = (val) => {
-        if (!val) return null;
-        if (val instanceof Date) return val;
-        if (typeof val === 'number') return new Date((val - 25569) * 86400 * 1000);
-        const date = new Date(val);
-        return !isNaN(date.getTime()) ? date : null;
     };
 
     const handleFileUpload = (e) => {
@@ -44,17 +37,20 @@ const GanttTool = ({ onBack }) => {
                 if (rawData.length === 0) throw new Error("The Excel file is empty.");
 
                 const processedData = rawData.map((row, index) => {
-                    const startDate = parseExcelDate(row['Start Date'] || row['start'] || row['Start']);
-                    const endDate = parseExcelDate(row['End Date'] || row['end'] || row['End']);
+                    const startDate = robustParseDate(row['Start Date'] || row['start'] || row['Start']);
+                    const endDate = robustParseDate(row['End Date'] || row['end'] || row['End']);
 
                     if (!startDate || !endDate) {
                         throw new Error(`Invalid date format at row ${index + 2}.`);
                     }
 
+                    const taskName = (row['Task'] || row['task'] || row['Name'] || `Task ${index + 1}`).toString();
+                    const parentName = (row['Parent'] || row['parent'] || null)?.toString();
+
                     return {
-                        id: index,
-                        task: (row['Task'] || row['task'] || row['Name'] || `Task ${index + 1}`).toString(),
-                        parent: (row['Parent'] || row['parent'] || null)?.toString(),
+                        id: `task-${index}-${taskName}`,
+                        task: taskName,
+                        parent: parentName,
                         start: startDate,
                         end: endDate,
                         progress: parseFloat(row['Progress'] || row['progress'] || 0) * (row['Progress'] > 1 ? 0.01 : 1),
@@ -219,9 +215,10 @@ const GanttRenderer = ({ tasks, expandedGroups, toggleGroup }) => {
     const isVisible = (task) => {
         if (!task.parent) return true;
         let p = task.parent;
+        const processedTasks = tasks;
         while (p) {
             if (expandedGroups[p] === false) return false;
-            const parentNode = tasks.find(t => t.task === p);
+            const parentNode = processedTasks.find(t => t.task === p);
             p = parentNode?.parent;
         }
         return true;

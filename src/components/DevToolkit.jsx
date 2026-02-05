@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, ArrowLeft, Copy, Check, Trash2, Code, ShieldCheck, Hash, Link as LinkIcon, FileJson, HelpCircle } from 'lucide-react';
+import { Terminal, ArrowLeft, Copy, Check, Trash2, Code, ShieldCheck, Hash, Link as LinkIcon, FileJson, HelpCircle, AlertCircle } from 'lucide-react';
+import { safeBtoa, safeAtob } from '../utils/helpers';
 
 const DevToolkit = ({ onBack }) => {
     const [activeTab, setActiveTab] = useState('json');
@@ -37,16 +38,8 @@ const DevToolkit = ({ onBack }) => {
                     setOutput(JSON.stringify(parsed, null, 4));
                     break;
                 case 'base64':
-                    try {
-                        // Check if it might be encoded by trying to decode
-                        const decoded = atob(val);
-                        // If we are here, it was successfully decoded, but user might want to encode instead.
-                        // For simplicity, we provide two buttons or a clearer logic.
-                        // Let's default to auto-detect or just provide "Encoded" preview.
-                        setOutput(btoa(val));
-                    } catch {
-                        setOutput(btoa(val));
-                    }
+                    // Default behavior: just encode the input for the quick preview
+                    setOutput(safeBtoa(val));
                     break;
                 case 'hash':
                     // We'll use subtle crypto for SHA-256
@@ -73,13 +66,9 @@ const DevToolkit = ({ onBack }) => {
     };
 
     const handleBase64Action = (action) => {
-        try {
-            if (action === 'encode') setOutput(btoa(input));
-            else setOutput(atob(input));
-            setError(null);
-        } catch (err) {
-            setError("Invalid input for this action.");
-        }
+        if (action === 'encode') setOutput(safeBtoa(input));
+        else setOutput(safeAtob(input));
+        setError(null);
     };
 
     const handleUrlAction = (action) => {
@@ -205,11 +194,5 @@ const DevToolkit = ({ onBack }) => {
         </div>
     );
 };
-
-const AlertCircle = ({ size, ...props }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-);
 
 export default DevToolkit;

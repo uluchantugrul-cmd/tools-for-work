@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText } from 'lucide-react';
+import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock } from 'lucide-react';
 
 const projectTools = [
   {
@@ -29,6 +29,33 @@ const projectTools = [
     icon: <LayoutGrid size={32} />,
     color1: '#ef4444',
     color2: '#f59e0b'
+  },
+  {
+    id: 'pomodoro',
+    name: 'Pomodoro Tracker',
+    category: 'Focus',
+    description: 'Deep work timer linked to specific projects with daily reporting and productivity stats.',
+    icon: <Timer size={32} />,
+    color1: '#f87171',
+    color2: '#ef4444'
+  },
+  {
+    id: 'meeting',
+    name: 'Meeting Architect',
+    category: 'Operation',
+    description: 'Structured note-taking that generates professional Markdown summaries and action items.',
+    icon: <Target size={32} />,
+    color1: '#60a5fa',
+    color2: '#3b82f6'
+  },
+  {
+    id: 'availability',
+    name: 'Team Sync Matrix',
+    category: 'Coordination',
+    description: 'Visualize global team availability and find common meeting slots across time zones.',
+    icon: <Clock size={32} />,
+    color1: '#34d399',
+    color2: '#10b981'
   }
 ];
 
@@ -113,7 +140,7 @@ const Menu = ({ onSelectTool }) => {
           animate={{ opacity: 1, scale: 1 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', border: '1px solid rgba(99, 102, 241, 0.2)' }}
         >
-          <Zap size={14} /> NEW: FORGE KIT DEV TOOLS ADDED
+          <Zap size={14} /> NEW: TEAM SYNC & POMODORO TOOLS ADDED
         </motion.div>
         <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: 900, marginBottom: '24px', background: 'linear-gradient(to bottom, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-2px' }}>
           Tools for Work
@@ -164,7 +191,7 @@ const ToolCard = ({ tool, onClick }) => (
     onClick={onClick}
     style={{ padding: '32px', cursor: 'pointer', display: 'flex', flexDirection: 'column', background: 'rgba(30, 41, 59, 0.4)' }}
   >
-    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: `linear-gradient(135deg, ${tool.color1}, ${tool.color2})`, display: 'flex', alignItems: 'center', justifyCenter: 'center', marginBottom: '24px', color: 'white', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: `linear-gradient(135deg, ${tool.color1}, ${tool.color2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', color: 'white' }}>
       {tool.icon}
     </div>
     <span style={{ color: tool.color1, fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{tool.category}</span>

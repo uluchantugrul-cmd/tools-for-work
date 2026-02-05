@@ -2,21 +2,14 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, ArrowLeft, Upload, FileDown, Calendar, AlertTriangle, CheckCircle2, HelpCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { format, differenceInDays, addDays, startOfDay, isWithinInterval } from 'date-fns';
+import { format, differenceInDays, addDays, startOfDay } from 'date-fns';
+import { robustParseDate, checkOverlap } from '../utils/helpers';
 
 const WorkloadTool = ({ onBack }) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
-
-    const parseExcelDate = (val) => {
-        if (!val) return null;
-        if (val instanceof Date) return val;
-        if (typeof val === 'number') return new Date((val - 25569) * 86400 * 1000);
-        const date = new Date(val);
-        return !isNaN(date.getTime()) ? date : null;
-    };
 
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
@@ -34,14 +27,14 @@ const WorkloadTool = ({ onBack }) => {
                 if (rawData.length === 0) throw new Error("The Excel file is empty.");
 
                 const processed = rawData.map((row, index) => {
-                    const start = parseExcelDate(row['Start Date'] || row['start']);
-                    const end = parseExcelDate(row['End Date'] || row['end']);
+                    const start = robustParseDate(row['Start Date'] || row['start']);
+                    const end = robustParseDate(row['End Date'] || row['end']);
                     const assignee = (row['Assignee'] || row['Owner'] || row['Person'] || 'Unassigned').toString();
 
                     if (!start || !end) throw new Error(`Invalid dates at row ${index + 2}`);
 
                     return {
-                        id: index,
+                        id: `work-${index}`,
                         task: (row['Task'] || `Task ${index + 1}`).toString(),
                         assignee,
                         start,
@@ -50,7 +43,6 @@ const WorkloadTool = ({ onBack }) => {
                     };
                 });
 
-                // Group by Assignee
                 const groups = {};
                 processed.forEach(task => {
                     if (!groups[task.assignee]) groups[task.assignee] = [];
@@ -167,7 +159,7 @@ const WorkloadRenderer = ({ resourceData }) => {
 
             {resourceData.map((resource, idx) => (
                 <div key={idx} style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.05)', minHeight: '80px' }}>
-                    <div style={{ width: sidebarWidth, position: 'sticky', left: 0, background: 'rgba(15, 23, 42, 0.95)', borderRight: '2px solid var(--accent-secondary)', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ width: sidebarWidth, position: 'sticky', left: 0, background: '#0f172a', borderRight: '2px solid var(--accent-secondary)', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 5 }}>
                         <span style={{ color: 'white', fontWeight: 700, fontSize: '0.9rem' }}>{resource.name}</span>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{resource.tasks.length} tasks</span>
                     </div>
@@ -176,24 +168,23 @@ const WorkloadRenderer = ({ resourceData }) => {
                             const left = differenceInDays(task.start, chartStart) * dayWidth;
                             const width = (differenceInDays(task.end, task.start) + 1) * dayWidth;
 
-                            // Check for collisions
                             const hasCollision = resource.tasks.some(other =>
                                 other.id !== task.id &&
-                                isWithinInterval(task.start, { start: other.start, end: other.end })
+                                checkOverlap(task.start, task.end, other.start, other.end)
                             );
 
                             return (
                                 <motion.div
                                     key={task.id}
-                                    initial={{ scaleX: 0 }}
-                                    animate={{ scaleX: 1 }}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
                                     style={{
                                         position: 'absolute',
                                         top: `${10 + (tidx * 30)}px`,
                                         left: `${left}px`,
                                         width: `${width}px`,
                                         height: '24px',
-                                        background: hasCollision ? 'rgba(239, 68, 68, 0.2)' : 'rgba(59, 130, 246, 0.1)',
+                                        background: hasCollision ? 'rgba(239, 68, 68, 0.15)' : 'rgba(59, 130, 246, 0.1)',
                                         border: `1px solid ${hasCollision ? '#ef4444' : 'var(--accent-secondary)'}`,
                                         borderRadius: '6px',
                                         display: 'flex',
@@ -202,7 +193,8 @@ const WorkloadRenderer = ({ resourceData }) => {
                                         fontSize: '0.7rem',
                                         color: hasCollision ? '#f87171' : 'white',
                                         whiteSpace: 'nowrap',
-                                        zIndex: hasCollision ? 2 : 1
+                                        zIndex: hasCollision ? 2 : 1,
+                                        boxShadow: hasCollision ? '0 0 10px rgba(239, 68, 68, 0.1)' : 'none'
                                     }}
                                 >
                                     {hasCollision && <AlertTriangle size={12} style={{ marginRight: '4px' }} />}
