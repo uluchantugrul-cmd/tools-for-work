@@ -150,9 +150,30 @@ const PomodoroTool = ({ onBack }) => {
                     </div>
 
                     <div className="glass-panel" style={{ padding: '32px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                            <BarChart3 size={24} className="text-purple-400" />
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Daily Report</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <BarChart3 size={24} className="text-purple-400" />
+                                <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Daily Report</h2>
+                            </div>
+                            {getDailyStats().length > 0 && (
+                                <button
+                                    onClick={() => {
+                                        const csvContent = "data:text/csv;charset=utf-8,"
+                                            + "Task,Pomodoros,Total Minutes\n"
+                                            + getDailyStats().map(s => `${s.name},${s.count},${s.count * 25}`).join("\n");
+                                        const encodedUri = encodeURI(csvContent);
+                                        const link = document.createElement("a");
+                                        link.setAttribute("href", encodedUri);
+                                        link.setAttribute("download", `Productivity_Report_${new Date().toISOString().split('T')[0]}.csv`);
+                                        document.body.appendChild(link);
+                                        link.click();
+                                    }}
+                                    className="button-secondary"
+                                    style={{ padding: '6px 12px', fontSize: '0.8rem' }}
+                                >
+                                    Export CSV
+                                </button>
+                            )}
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                             {getDailyStats().length > 0 ? getDailyStats().map((stat, i) => (
