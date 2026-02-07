@@ -17,6 +17,8 @@ import PomodoroTool from './components/PomodoroTool';
 import MeetingNotesTool from './components/MeetingNotesTool';
 import AvailabilityTool from './components/AvailabilityTool';
 import About from './components/About';
+import ROICalculator from './components/ROICalculator';
+import MetaTagGenerator from './components/MetaTagGenerator';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
 const ScrollToTop = () => {
@@ -51,6 +53,8 @@ function App() {
                         <Route path="/meeting" element={<MeetingWrapper />} />
                         <Route path="/availability" element={<AvailabilityWrapper />} />
                         <Route path="/guides" element={<BlogWrapper />} />
+                        <Route path="/roi" element={<ROICalculatorWrapper />} />
+                        <Route path="/meta-tags" element={<MetaTagGeneratorWrapper />} />
                         <Route path="/about" element={<AboutWrapper />} />
                         <Route path="/privacy" element={<LegalWrapper type="privacy" />} />
                         <Route path="/terms" element={<LegalWrapper type="terms" />} />
@@ -140,6 +144,16 @@ const BlogWrapper = () => {
     return <Blog onBack={() => navigate('/')} onNavigateTool={(id) => navigate(id === 'menu' ? '/' : `/${id}`)} />;
 };
 
+const ROICalculatorWrapper = () => {
+    const navigate = useNavigate();
+    return <ROICalculator onBack={() => navigate('/')} />;
+};
+
+const MetaTagGeneratorWrapper = () => {
+    const navigate = useNavigate();
+    return <MetaTagGenerator onBack={() => navigate('/')} />;
+};
+
 const LegalWrapper = ({ type }) => {
     const navigate = useNavigate();
     return <Legal type={type} onBack={() => navigate('/')} />;
@@ -171,13 +185,15 @@ const Footer = () => {
                         <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '1rem' }}>
                             <li style={{ marginBottom: '16px' }}><Link to="/gantt" className="footer-link">Gantt Chart Pro</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/workload" className="footer-link">Workload Planner</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/roi" className="footer-link">ROI Calculator</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/pomodoro" className="footer-link">Pomodoro Tracker</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/meeting" className="footer-link">Meeting Architect</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '1.1rem', fontWeight: 600 }}>Resources</h4>
+                        <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '1.1rem', fontWeight: 600 }}>Engineering & Utilities</h4>
                         <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '1rem' }}>
+                            <li style={{ marginBottom: '16px' }}><Link to="/meta-tags" className="footer-link">Meta Tag Generator</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/forge" className="footer-link">Forge Kit (Dev)</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/about" className="footer-link">About Us</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/privacy" className="footer-link">Privacy Policy</Link></li>

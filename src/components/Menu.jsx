@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock } from 'lucide-react';
+import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search } from 'lucide-react';
 
 const projectTools = [
   {
@@ -56,6 +56,15 @@ const projectTools = [
     icon: <Clock size={32} />,
     color1: '#34d399',
     color2: '#10b981'
+  },
+  {
+    id: 'roi',
+    name: 'ROI Calculator',
+    category: 'Business',
+    description: 'Calculate the financial impact of productivity tools and automation for your team.',
+    icon: <TrendingUp size={32} />,
+    color1: '#10b981',
+    color2: '#059669'
   }
 ];
 
@@ -113,6 +122,15 @@ const utilityTools = [
     icon: <FileText size={32} />,
     color1: '#0ea5e9',
     color2: '#6366f1'
+  },
+  {
+    id: 'meta-tags',
+    name: 'Meta Tag Gen',
+    category: 'SEO',
+    description: 'Generate perfect HTML, Open Graph, and Twitter card meta tags with live preview.',
+    icon: <Search size={32} />,
+    color1: '#a855f7',
+    color2: '#d946ef'
   }
 ];
 
