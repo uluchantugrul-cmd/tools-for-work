@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search } from 'lucide-react';
+import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, DollarSign } from 'lucide-react';
 
 const projectTools = [
   {
@@ -70,6 +70,15 @@ const projectTools = [
 
 const utilityTools = [
   {
+    id: 'salary',
+    name: 'Salary Calculator',
+    category: 'Finance',
+    description: 'Convert annual salaries to hourly rates and visualize income breakdown across timeframes.',
+    icon: <DollarSign size={32} />,
+    color1: '#10b981',
+    color2: '#34d399'
+  },
+  {
     id: 'image',
     name: 'Pixel Studio',
     category: 'Design',
@@ -95,6 +104,15 @@ const utilityTools = [
     icon: <Terminal size={32} />,
     color1: '#6366f1',
     color2: '#a855f7'
+  },
+  {
+    id: 'password',
+    name: 'Password Gen',
+    category: 'Security',
+    description: 'Generate cryptographically strong passwords with custom rules and strength estimation.',
+    icon: <Shield size={32} />,
+    color1: '#f97316',
+    color2: '#ef4444'
   },
   {
     id: 'converter',
@@ -158,7 +176,7 @@ const Menu = ({ onSelectTool }) => {
           animate={{ opacity: 1, scale: 1 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', border: '1px solid rgba(99, 102, 241, 0.2)' }}
         >
-          <Zap size={14} /> NEW: TEAM SYNC & POMODORO TOOLS ADDED
+          <Zap size={14} /> NEW: SALARY CALCULATOR & PASSWORD GEN ADDED
         </motion.div>
         <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: 900, marginBottom: '24px', background: 'linear-gradient(to bottom, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-2px' }}>
           Tools for Work

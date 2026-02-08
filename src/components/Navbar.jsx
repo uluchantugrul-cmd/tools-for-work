@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search } from 'lucide-react';
+import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, Shield, DollarSign, Briefcase } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = ({ onHome, onBlog, activePath }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +21,15 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }, [isMenuOpen]);
 
     const navItemStyle = (path) => ({
         color: activePath === path ? 'white' : 'var(--text-muted)',
@@ -99,73 +109,98 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                             Products <ChevronDown size={16} />
                         </button>
 
-                        {isDropdownOpen && (
-                            <div className="animate-fade-in" style={{
-                                position: 'absolute',
-                                top: '100%',
-                                right: -100,
-                                width: '300px',
-                                background: 'var(--bg-dark)',
-                                border: '1px solid var(--glass-border)',
-                                borderRadius: '16px',
-                                padding: '16px',
-                                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
-                                marginTop: '16px'
-                            }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '12px', letterSpacing: '1px' }}>PROJECT & PRODUCTIVITY</div>
-                                <div onClick={() => handleToolSelect('/gantt')} className="dropdown-item">
-                                    <BarChart2 size={18} className="text-blue-500" /> Gantt Chart Pro
-                                </div>
-                                <div onClick={() => handleToolSelect('/workload')} className="dropdown-item">
-                                    <Users size={18} className="text-purple-500" /> Workload Planner
-                                </div>
-                                <div onClick={() => handleToolSelect('/strategy')} className="dropdown-item">
-                                    <LayoutGrid size={18} className="text-red-500" /> Strategy Matrix
-                                </div>
-                                <div onClick={() => handleToolSelect('/roi')} className="dropdown-item">
-                                    <TrendingUp size={18} className="text-emerald-500" /> ROI Calculator
-                                </div>
+                        {/* Dropdown Content */}
+                        <AnimatePresence>
+                            {isDropdownOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '100%',
+                                        right: -100,
+                                        width: '640px',
+                                        background: 'var(--bg-dark)',
+                                        border: '1px solid var(--glass-border)',
+                                        borderRadius: '16px',
+                                        padding: '24px',
+                                        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+                                        marginTop: '16px',
+                                        display: 'grid',
+                                        gridTemplateColumns: '1fr 1fr',
+                                        gap: '32px'
+                                    }}>
 
-                                <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
+                                    {/* Column 1 */}
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '16px', letterSpacing: '1px' }}>PROJECT & PRODUCTIVITY</div>
+                                        <div onClick={() => handleToolSelect('/gantt')} className="dropdown-item">
+                                            <BarChart2 size={18} className="text-blue-500" /> Gantt Chart Pro
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/workload')} className="dropdown-item">
+                                            <Users size={18} className="text-purple-500" /> Workload Planner
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/strategy')} className="dropdown-item">
+                                            <LayoutGrid size={18} className="text-red-500" /> Strategy Matrix
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/roi')} className="dropdown-item">
+                                            <TrendingUp size={18} className="text-emerald-500" /> ROI Calculator
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/salary')} className="dropdown-item">
+                                            <DollarSign size={18} className="text-green-500" /> Salary Calculator <span className="new-badge">NEW</span>
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/pomodoro')} className="dropdown-item">
+                                            <Timer size={18} className="text-red-400" /> Pomodoro Tracker
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/meeting')} className="dropdown-item">
+                                            <Target size={18} className="text-blue-400" /> Meeting Architect
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/availability')} className="dropdown-item">
+                                            <Clock size={18} className="text-emerald-400" /> Sync Matrix
+                                        </div>
+                                    </div>
 
-                                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '12px', letterSpacing: '1px' }}>UTILITIES</div>
-                                <div onClick={() => handleToolSelect('/forge')} className="dropdown-item">
-                                    <Terminal size={18} className="text-indigo-500" /> Forge Kit <span style={{ fontSize: '0.7em', padding: '2px 6px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', borderRadius: '4px', marginLeft: 'auto' }}>NEW</span>
-                                </div>
-                                <div onClick={() => handleToolSelect('/qr')} className="dropdown-item">
-                                    <QrCode size={18} className="text-orange-500" /> Smart QR Studio
-                                </div>
-                                <div onClick={() => handleToolSelect('/converter')} className="dropdown-item">
-                                    <FileCode size={18} className="text-emerald-500" /> Converter
-                                </div>
-                                <div onClick={() => handleToolSelect('/image')} className="dropdown-item">
-                                    <Camera size={18} className="text-pink-500" /> Pixel Studio
-                                </div>
-                                <div onClick={() => handleToolSelect('/utm')} className="dropdown-item">
-                                    <Megaphone size={18} className="text-orange-400" /> UTM Architect
-                                </div>
-                                <div onClick={() => handleToolSelect('/markdown')} className="dropdown-item">
-                                    <FileText size={18} className="text-sky-400" /> Markdown Pro
-                                </div>
-                                <div onClick={() => handleToolSelect('/meta-tags')} className="dropdown-item">
-                                    <Search size={18} className="text-purple-400" /> Meta Tags Gen
-                                </div>
-                                <div onClick={() => handleToolSelect('/pomodoro')} className="dropdown-item">
-                                    <Timer size={18} className="text-red-400" /> Pomodoro Tracker <span style={{ fontSize: '0.7em', padding: '2px 6px', background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', borderRadius: '4px', marginLeft: 'auto' }}>HOT</span>
-                                </div>
-                                <div onClick={() => handleToolSelect('/meeting')} className="dropdown-item">
-                                    <Target size={18} className="text-blue-400" /> Meeting Architect
-                                </div>
-                                <div onClick={() => handleToolSelect('/availability')} className="dropdown-item">
-                                    <Clock size={18} className="text-emerald-400" /> Sync Matrix
-                                </div>
-                            </div>
-                        )}
+                                    {/* Column 2 */}
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '16px', letterSpacing: '1px' }}>UTILITIES & ENGINEERING</div>
+                                        <div onClick={() => handleToolSelect('/forge')} className="dropdown-item">
+                                            <Terminal size={18} className="text-indigo-500" /> Forge Kit <span className="new-badge">DEV</span>
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/password')} className="dropdown-item">
+                                            <Shield size={18} className="text-orange-500" /> Password Gen <span className="new-badge">NEW</span>
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/qr')} className="dropdown-item">
+                                            <QrCode size={18} className="text-orange-500" /> Smart QR Studio
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/converter')} className="dropdown-item">
+                                            <FileCode size={18} className="text-emerald-500" /> Converter
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/image')} className="dropdown-item">
+                                            <Camera size={18} className="text-pink-500" /> Pixel Studio
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/utm')} className="dropdown-item">
+                                            <Megaphone size={18} className="text-orange-400" /> UTM Architect
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/markdown')} className="dropdown-item">
+                                            <FileText size={18} className="text-sky-400" /> Markdown Pro
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/meta-tags')} className="dropdown-item">
+                                            <Search size={18} className="text-purple-400" /> Meta Tags Gen
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     <a href="#" onClick={(e) => { e.preventDefault(); onBlog(); }} style={navItemStyle('/guides')}>
                         <BookOpen size={18} /> Guides
                     </a>
+
+                    <button onClick={() => handleToolSelect('/services')} className="button-primary" style={{ padding: '10px 20px', fontSize: '0.9rem', minHeight: '40px' }}>
+                        Work With Us
+                    </button>
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -175,47 +210,61 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
             </div>
 
             {/* Mobile Sidebar */}
-            {isMenuOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(15, 23, 42, 0.98)',
-                    zIndex: 1050,
-                    overflowY: 'auto',
-                    padding: '100px 24px 40px'
-                }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '8px' }}>SUITE</div>
-                        <button onClick={() => handleToolSelect('/gantt')} className="mobile-item"><BarChart2 size={20} /> Gantt Chart Pro</button>
-                        <button onClick={() => handleToolSelect('/workload')} className="mobile-item"><Users size={20} /> Workload Planner</button>
-                        <button onClick={() => handleToolSelect('/strategy')} className="mobile-item"><LayoutGrid size={20} /> Strategy Matrix</button>
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: 'var(--bg-dark)',
+                            zIndex: 1050,
+                            overflowY: 'auto',
+                            padding: '100px 24px 40px',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}
+                    >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '8px' }}>SUITE</div>
+                            <button onClick={() => handleToolSelect('/gantt')} className="mobile-item"><BarChart2 size={20} /> Gantt Chart Pro</button>
+                            <button onClick={() => handleToolSelect('/workload')} className="mobile-item"><Users size={20} /> Workload Planner</button>
+                            <button onClick={() => handleToolSelect('/strategy')} className="mobile-item"><LayoutGrid size={20} /> Strategy Matrix</button>
+                            <button onClick={() => handleToolSelect('/roi')} className="mobile-item"><TrendingUp size={20} /> ROI Calculator</button>
+                            <button onClick={() => handleToolSelect('/salary')} className="mobile-item"><DollarSign size={20} /> Salary Calculator</button>
 
-                        <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
+                            <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
 
-                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '8px' }}>TOOLS</div>
-                        <button onClick={() => handleToolSelect('/forge')} className="mobile-item"><Terminal size={20} /> Forge Kit</button>
-                        <button onClick={() => handleToolSelect('/qr')} className="mobile-item"><QrCode size={20} /> Smart QR Studio</button>
-                        <button onClick={() => handleToolSelect('/converter')} className="mobile-item"><FileCode size={20} /> converter</button>
-                        <button onClick={() => handleToolSelect('/image')} className="mobile-item"><Camera size={20} /> Pixel Studio</button>
-                        <button onClick={() => handleToolSelect('/utm')} className="mobile-item"><Megaphone size={20} /> UTM Architect</button>
-                        <button onClick={() => handleToolSelect('/markdown')} className="mobile-item"><FileText size={20} /> Markdown Pro</button>
-                        <button onClick={() => handleToolSelect('/pomodoro')} className="mobile-item"><Timer size={20} /> Pomodoro Tracker</button>
-                        <button onClick={() => handleToolSelect('/meeting')} className="mobile-item"><Target size={20} /> Meeting Architect</button>
-                        <button onClick={() => handleToolSelect('/availability')} className="mobile-item"><Clock size={20} /> Sync Matrix</button>
-                        <button onClick={() => handleToolSelect('/roi')} className="mobile-item"><TrendingUp size={20} /> ROI Calculator</button>
-                        <button onClick={() => handleToolSelect('/meta-tags')} className="mobile-item"><Search size={20} /> Meta Tags Gen</button>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '8px' }}>TOOLS</div>
+                            <button onClick={() => handleToolSelect('/forge')} className="mobile-item"><Terminal size={20} /> Forge Kit</button>
+                            <button onClick={() => handleToolSelect('/password')} className="mobile-item"><Shield size={20} /> Password Gen</button>
+                            <button onClick={() => handleToolSelect('/qr')} className="mobile-item"><QrCode size={20} /> Smart QR Studio</button>
+                            <button onClick={() => handleToolSelect('/converter')} className="mobile-item"><FileCode size={20} /> Converter</button>
+                            <button onClick={() => handleToolSelect('/image')} className="mobile-item"><Camera size={20} /> Pixel Studio</button>
+                            <button onClick={() => handleToolSelect('/utm')} className="mobile-item"><Megaphone size={20} /> UTM Architect</button>
+                            <button onClick={() => handleToolSelect('/markdown')} className="mobile-item"><FileText size={20} /> Markdown Pro</button>
+                            <button onClick={() => handleToolSelect('/pomodoro')} className="mobile-item"><Timer size={20} /> Pomodoro Tracker</button>
+                            <button onClick={() => handleToolSelect('/meeting')} className="mobile-item"><Target size={20} /> Meeting Architect</button>
+                            <button onClick={() => handleToolSelect('/availability')} className="mobile-item"><Clock size={20} /> Sync Matrix</button>
+                            <button onClick={() => handleToolSelect('/meta-tags')} className="mobile-item"><Search size={20} /> Meta Tags Gen</button>
 
-                        <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
+                            <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
 
-                        <button onClick={() => handleToolSelect('/guides')} className="button-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }}>
-                            <BookOpen size={20} /> Read Guides
-                        </button>
-                    </div>
-                </div>
-            )}
+                            <button onClick={() => handleToolSelect('/guides')} className="mobile-item"><BookOpen size={20} /> Read Guides</button>
+
+                            <button onClick={() => handleToolSelect('/services')} className="button-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '32px' }}>
+                                <Briefcase size={20} /> Work With Us
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <style dangerouslySetInnerHTML={{
                 __html: `
@@ -227,13 +276,15 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                     align-items: center;
                     gap: 12px;
                     color: white;
-                    font-size: 0.9rem;
+                    font-size: 0.95rem;
                     transition: all 0.2s;
                     font-weight: 500;
+                    margin-bottom: 4px;
                 }
                 .dropdown-item:hover {
                     background: rgba(255,255,255,0.05);
                     transform: translateX(4px);
+                    color: white;
                 }
                 .mobile-item {
                     background: transparent;
@@ -248,7 +299,16 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                     border-bottom: 1px solid rgba(255,255,255,0.03);
                     width: 100%;
                 }
-                @media (max-width: 768px) {
+                .new-badge {
+                    font-size: 0.6em;
+                    padding: 2px 6px;
+                    background: rgba(99, 102, 241, 0.1);
+                    color: #818cf8;
+                    border-radius: 4px;
+                    margin-left: auto;
+                    font-weight: 700;
+                }
+                @media (max-width: 900px) {
                     .desktop-menu { display: none !important; }
                     .mobile-toggle { display: block !important; }
                 }
@@ -258,3 +318,4 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
 };
 
 export default Navbar;
+

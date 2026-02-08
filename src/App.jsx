@@ -20,6 +20,9 @@ import About from './components/About';
 import ROICalculator from './components/ROICalculator';
 import MetaTagGenerator from './components/MetaTagGenerator';
 import AnalyticsTracker from './components/AnalyticsTracker';
+import PasswordGenerator from './components/PasswordGenerator';
+import SalaryCalculator from './components/SalaryCalculator';
+import Services from './components/Services';
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -55,6 +58,9 @@ function App() {
                         <Route path="/guides" element={<BlogWrapper />} />
                         <Route path="/roi" element={<ROICalculatorWrapper />} />
                         <Route path="/meta-tags" element={<MetaTagGeneratorWrapper />} />
+                        <Route path="/password" element={<PasswordGeneratorWrapper />} />
+                        <Route path="/salary" element={<SalaryCalculatorWrapper />} />
+                        <Route path="/services" element={<ServicesWrapper />} />
                         <Route path="/about" element={<AboutWrapper />} />
                         <Route path="/privacy" element={<LegalWrapper type="privacy" />} />
                         <Route path="/terms" element={<LegalWrapper type="terms" />} />
@@ -154,6 +160,21 @@ const MetaTagGeneratorWrapper = () => {
     return <MetaTagGenerator onBack={() => navigate('/')} />;
 };
 
+const PasswordGeneratorWrapper = () => {
+    const navigate = useNavigate();
+    return <PasswordGenerator onBack={() => navigate('/')} />;
+};
+
+const SalaryCalculatorWrapper = () => {
+    const navigate = useNavigate();
+    return <SalaryCalculator onBack={() => navigate('/')} />;
+};
+
+const ServicesWrapper = () => {
+    const navigate = useNavigate();
+    return <Services onBack={() => navigate('/')} />;
+};
+
 const LegalWrapper = ({ type }) => {
     const navigate = useNavigate();
     return <Legal type={type} onBack={() => navigate('/')} />;
@@ -179,6 +200,11 @@ const Footer = () => {
                         <p style={{ color: 'var(--text-muted)', lineHeight: 1.8, fontSize: '1.1rem', maxWidth: '400px' }}>
                             Local-first productivity tools built for speed and privacy. No data ever leaves your browser.
                         </p>
+                        <div style={{ marginTop: '24px' }}>
+                            <Link to="/services" className="button-primary" style={{ padding: '10px 20px', fontSize: '0.9rem', width: 'auto', display: 'inline-flex' }}>
+                                Work With Us
+                            </Link>
+                        </div>
                     </div>
                     <div>
                         <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '1.1rem', fontWeight: 600 }}>Project Suite</h4>
@@ -188,14 +214,17 @@ const Footer = () => {
                             <li style={{ marginBottom: '16px' }}><Link to="/roi" className="footer-link">ROI Calculator</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/pomodoro" className="footer-link">Pomodoro Tracker</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/meeting" className="footer-link">Meeting Architect</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/salary" className="footer-link">Salary Calculator</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h4 style={{ color: 'white', marginBottom: '24px', fontSize: '1.1rem', fontWeight: 600 }}>Engineering & Utilities</h4>
                         <ul style={{ listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '1rem' }}>
                             <li style={{ marginBottom: '16px' }}><Link to="/meta-tags" className="footer-link">Meta Tag Generator</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/password" className="footer-link">Password Generator</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/forge" className="footer-link">Forge Kit (Dev)</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/about" className="footer-link">About Us</Link></li>
+                            <li style={{ marginBottom: '16px' }}><Link to="/services" className="footer-link">Services</Link></li>
                             <li style={{ marginBottom: '16px' }}><Link to="/privacy" className="footer-link">Privacy Policy</Link></li>
                         </ul>
                     </div>
