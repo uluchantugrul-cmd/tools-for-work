@@ -23,6 +23,8 @@ import AnalyticsTracker from './components/AnalyticsTracker';
 import PasswordGenerator from './components/PasswordGenerator';
 import SalaryCalculator from './components/SalaryCalculator';
 import Services from './components/Services';
+import ExpenseTracker from './components/ExpenseTracker';
+import ColorPalette from './components/ColorPalette';
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -60,6 +62,8 @@ function App() {
                         <Route path="/meta-tags" element={<MetaTagGeneratorWrapper />} />
                         <Route path="/password" element={<PasswordGeneratorWrapper />} />
                         <Route path="/salary" element={<SalaryCalculatorWrapper />} />
+                        <Route path="/expense" element={<ExpenseTrackerWrapper />} />
+                        <Route path="/colors" element={<ColorPaletteWrapper />} />
                         <Route path="/services" element={<ServicesWrapper />} />
                         <Route path="/about" element={<AboutWrapper />} />
                         <Route path="/privacy" element={<LegalWrapper type="privacy" />} />
@@ -168,6 +172,16 @@ const PasswordGeneratorWrapper = () => {
 const SalaryCalculatorWrapper = () => {
     const navigate = useNavigate();
     return <SalaryCalculator onBack={() => navigate('/')} />;
+};
+
+const ExpenseTrackerWrapper = () => {
+    const navigate = useNavigate();
+    return <ExpenseTracker onBack={() => navigate('/')} />;
+};
+
+const ColorPaletteWrapper = () => {
+    const navigate = useNavigate();
+    return <ColorPalette onBack={() => navigate('/')} />;
 };
 
 const ServicesWrapper = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, DollarSign } from 'lucide-react';
+import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, DollarSign, Receipt, Droplets } from 'lucide-react';
 
 const projectTools = [
   {
@@ -149,6 +149,24 @@ const utilityTools = [
     icon: <Search size={32} />,
     color1: '#a855f7',
     color2: '#d946ef'
+  },
+  {
+    id: 'expense',
+    name: 'Expense Tracker',
+    category: 'Finance',
+    description: 'Track, categorize, and analyze expenses locally. Export to CSV. No account needed.',
+    icon: <Receipt size={32} />,
+    color1: '#ef4444',
+    color2: '#f97316'
+  },
+  {
+    id: 'colors',
+    name: 'Color Palette',
+    category: 'Design',
+    description: 'Generate accessible color palettes with WCAG contrast checking and CSS export.',
+    icon: <Droplets size={32} />,
+    color1: '#ec4899',
+    color2: '#8b5cf6'
   }
 ];
 

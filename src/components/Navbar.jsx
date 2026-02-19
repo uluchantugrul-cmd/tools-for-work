@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, Shield, DollarSign, Briefcase } from 'lucide-react';
+import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, Shield, DollarSign, Briefcase, Receipt, Droplets } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -188,6 +188,12 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                                         <div onClick={() => handleToolSelect('/meta-tags')} className="dropdown-item">
                                             <Search size={18} className="text-purple-400" /> Meta Tags Gen
                                         </div>
+                                        <div onClick={() => handleToolSelect('/expense')} className="dropdown-item">
+                                            <Receipt size={18} className="text-red-400" /> Expense Tracker <span className="new-badge">NEW</span>
+                                        </div>
+                                        <div onClick={() => handleToolSelect('/colors')} className="dropdown-item">
+                                            <Droplets size={18} className="text-pink-400" /> Color Palette <span className="new-badge">NEW</span>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
@@ -253,6 +259,8 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                             <button onClick={() => handleToolSelect('/meeting')} className="mobile-item"><Target size={20} /> Meeting Architect</button>
                             <button onClick={() => handleToolSelect('/availability')} className="mobile-item"><Clock size={20} /> Sync Matrix</button>
                             <button onClick={() => handleToolSelect('/meta-tags')} className="mobile-item"><Search size={20} /> Meta Tags Gen</button>
+                            <button onClick={() => handleToolSelect('/expense')} className="mobile-item"><Receipt size={20} /> Expense Tracker</button>
+                            <button onClick={() => handleToolSelect('/colors')} className="mobile-item"><Droplets size={20} /> Color Palette</button>
 
                             <div style={{ height: '1px', background: 'var(--glass-border)', margin: '16px 0' }} />
 
