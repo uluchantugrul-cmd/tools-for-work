@@ -23,52 +23,59 @@ const YoutubeDownloader = ({ onBack }) => {
         setSuccess(false);
         setResultUrl(null);
 
-        try {
-            // Using a more reliable open API endpoint for YouTube downloads
-            const response = await fetch('https://cobalt.shaka.video/api/json', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    url: url,
-                    videoQuality: isAudioOnly ? '720' : quality,
-                    audioFormat: 'mp3',
-                    isAudioOnly: isAudioOnly,
-                    downloadMode: 'auto'
-                })
-            });
+        // Try multiple instances in case one is down or blocking CORS
+        const instances = [
+            'https://cobalt.shaka.video/api/json',
+            'https://co.wuk.sh/api/json',
+            'https://api.cobalt.tools/api/json'
+        ];
 
-            if (!response.ok) {
-                if (response.status === 403 || response.status === 429) {
-                    throw new Error('API limit reached or bot protection active. Please try again in a few minutes.');
+        let lastError = null;
+
+        for (const instance of instances) {
+            try {
+                const response = await fetch(instance, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        videoQuality: isAudioOnly ? '720' : quality,
+                        audioFormat: 'mp3',
+                        isAudioOnly: isAudioOnly,
+                        downloadMode: 'auto'
+                    })
+                });
+
+                if (!response.ok) {
+                    continue; // Try next instance
                 }
-                throw new Error(`Server responded with ${response.status}. Please try again later.`);
-            }
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.status === 'error') {
-                throw new Error(data.text || 'Failed to process video');
-            }
+                if (data.status === 'error') {
+                    lastError = data.text;
+                    continue;
+                }
 
-            if (data.url) {
-                setResultUrl(data.url);
-                setSuccess(true);
-                // Automatically try to open download link in new tab
-                window.open(data.url, '_blank');
-            } else if (data.status === 'picker') {
-                throw new Error('This video has multiple items. Please try a direct link.');
-            } else {
-                throw new Error('Unexpected response format');
+                if (data.url) {
+                    setResultUrl(data.url);
+                    setSuccess(true);
+                    window.open(data.url, '_blank');
+                    setLoading(false);
+                    return; // Success!
+                }
+            } catch (err) {
+                lastError = err.message;
+                console.warn(`Instance ${instance} failed:`, err);
+                continue;
             }
-        } catch (err) {
-            setError(err.message || 'An error occurred while fetching the download link. Please try again later.');
-            console.error('Download Error:', err);
-        } finally {
-            setLoading(false);
         }
+
+        setError(lastError || 'All download servers are currently busy. Please try again in a few minutes or with a different link.');
+        setLoading(false);
     };
 
     return (
