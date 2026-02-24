@@ -24,61 +24,42 @@ const YoutubeDownloader = ({ onBack }) => {
         setSuccess(false);
         setResultUrl(null);
 
-        // Try multiple instances using the correct API path conventions
-        const instances = [
-            'https://cobalt.shaka.video',
-            'https://co.wuk.sh',
-            'https://api.cobalt.tools',
-            'https://cobalt-api.zeat.me'
-        ];
+        try {
+            // Using our own server-side proxy to bypass CORS
+            const response = await fetch('/api/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url,
+                    vQuality: quality === 'max' ? '1080' : quality,
+                    videoQuality: quality === 'max' ? '1080' : quality,
+                    aFormat: 'mp3',
+                    isAudioOnly: isAudioOnly,
+                    isNoTTWatermark: true,
+                    downloadMode: 'auto'
+                })
+            });
 
-        let lastError = null;
+            const data = await response.json();
 
-        for (const instance of instances) {
-            try {
-                // In modern Cobalt, many instances use the root path for API
-                // or specific API endpoints. We will try to negotiate.
-                const response = await fetch(`${instance}/api/json`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        url: url,
-                        vQuality: quality === 'max' ? '1080' : quality, // Cobalt uses vQuality for some versions
-                        videoQuality: quality === 'max' ? '1080' : quality,
-                        aFormat: 'mp3',
-                        isAudioOnly: isAudioOnly,
-                        isNoTTWatermark: true,
-                        downloadMode: 'auto'
-                    })
-                });
-
-                if (!response.ok) {
-                    continue; // Try next instance
-                }
-
-                const data = await response.json();
-
-                if (data.status === 'error') {
-                    lastError = data.text;
-                    continue;
-                }
-
-                if (data.url) {
-                    setResultUrl(data.url);
-                    setSuccess(true);
-                    window.open(data.url, '_blank');
-                    setLoading(false);
-                    return; // Success!
-                }
-            } catch (err) {
-                lastError = err.message;
-                console.warn(`Instance ${instance} failed:`, err);
-                continue;
+            if (data.status === 'error') {
+                setError(data.text || 'Failed to process video');
+                setLoading(false);
+                return;
             }
+
+            if (data.url) {
+                setResultUrl(data.url);
+                setSuccess(true);
+                window.open(data.url, '_blank');
+                setLoading(false);
+                return;
+            }
+        } catch (err) {
+            setError('Connection error. Please try again later.');
+            console.error('Download Error:', err);
         }
 
         setError(lastError || 'All download servers are currently busy. Please try again in a few minutes or with a different link.');
