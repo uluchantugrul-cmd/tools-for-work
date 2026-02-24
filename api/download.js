@@ -4,9 +4,10 @@ export default async function handler(req, res) {
     }
 
     const instances = [
-        'https://cobalt.shaka.video',
         'https://co.wuk.sh',
-        'https://cobalt.perv.it',
+        'https://cobalt.shaka.video',
+        'https://cobalt.instavids.net',
+        'https://cobalt-api.zeat.me',
         'https://api.cobalt.tools'
     ];
 
@@ -14,38 +15,41 @@ export default async function handler(req, res) {
 
     for (const instance of instances) {
         try {
-            // Try both root / and /api/json as different instances have different setups
-            const endpoints = ['/api/json', '/'];
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-            for (const endpoint of endpoints) {
-                try {
-                    const response = await fetch(`${instance}${endpoint}`, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-                        },
-                        body: JSON.stringify(req.body)
-                    });
+            const response = await fetch(`${instance}/api/json`, {
+                method: 'POST',
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Origin': instance,
+                    'Referer': instance + '/',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+                },
+                body: JSON.stringify(req.body)
+            });
 
-                    if (!response.ok) continue;
+            clearTimeout(timeoutId);
 
-                    const data = await response.json();
-
-                    if (data.status !== 'error') {
-                        return res.status(200).json(data);
-                    }
-                    lastError = data.text || 'Instance error';
-                } catch (innerErr) {
-                    lastError = innerErr.message;
-                    continue;
-                }
+            if (!response.ok) {
+                lastError = `Server ${instance} reported ${response.status}`;
+                continue;
             }
+
+            const data = await response.json();
+
+            if (data.status !== 'error') {
+                return res.status(200).json(data);
+            }
+            lastError = data.text || 'Instance reported an error';
         } catch (err) {
-            lastError = err.message;
+            lastError = err.name === 'AbortError' ? `Timeout on ${instance}` : err.message;
+            console.warn(`Proxy fail for ${instance}:`, lastError);
+            continue;
         }
     }
 
-    res.status(500).json({ status: 'error', text: lastError || 'All download servers failed to respond.' });
+    res.status(500).json({ status: 'error', text: lastError || 'All download nodes are unavailable.' });
 }

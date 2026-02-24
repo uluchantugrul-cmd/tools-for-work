@@ -104,7 +104,7 @@ const YoutubeDownloader = ({ onBack }) => {
                     <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
                         High-quality YouTube video and audio downloader. Ad-free, fast, and simple.
                     </p>
-                    <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', marginTop: '8px' }}>Engine v1.0.5 - Secure Proxy</p>
+                    <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', marginTop: '8px' }}>Engine v1.0.6 - Ultra Proxy</p>
                 </div>
 
 
