@@ -25,21 +25,24 @@ const YoutubeDownloader = ({ onBack }) => {
 
         // Try multiple instances in case one is down or blocking CORS
         const instances = [
-            'https://cobalt.shaka.video/api/json',
-            'https://co.wuk.sh/api/json',
-            'https://api.cobalt.tools/api/json'
+            'https://cobalt.shaka.video',
+            'https://co.wuk.sh',
+            'https://api.cobalt.tools',
+            'https://cobalt-api.zeat.me'
         ];
 
         let lastError = null;
 
         for (const instance of instances) {
             try {
-                const response = await fetch(instance, {
+                const response = await fetch(`${instance}/api/json`, {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
+
                     body: JSON.stringify({
                         url: url,
                         videoQuality: isAudioOnly ? '720' : quality,
@@ -116,7 +119,9 @@ const YoutubeDownloader = ({ onBack }) => {
                     <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
                         High-quality YouTube video and audio downloader. Ad-free, fast, and simple.
                     </p>
+                    <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)', marginTop: '8px' }}>Engine v1.0.4 - Fallback Active</p>
                 </div>
+
 
                 <div className="glass-panel" style={{ padding: '40px' }}>
                     <form onSubmit={handleDownload}>
