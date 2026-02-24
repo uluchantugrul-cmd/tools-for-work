@@ -24,8 +24,8 @@ const YoutubeDownloader = ({ onBack }) => {
         setResultUrl(null);
 
         try {
-            // Using Cobalt API (open-source media downloader)
-            const response = await fetch('https://api.cobalt.tools/api/json', {
+            // Using a more reliable open API endpoint for YouTube downloads
+            const response = await fetch('https://cobalt.shaka.video/api/json', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -39,6 +39,13 @@ const YoutubeDownloader = ({ onBack }) => {
                     downloadMode: 'auto'
                 })
             });
+
+            if (!response.ok) {
+                if (response.status === 403 || response.status === 429) {
+                    throw new Error('API limit reached or bot protection active. Please try again in a few minutes.');
+                }
+                throw new Error(`Server responded with ${response.status}. Please try again later.`);
+            }
 
             const data = await response.json();
 
