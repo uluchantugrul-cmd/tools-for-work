@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Youtube, Download, Music, Video, AlertCircle, CheckCircle2, Loader2, ArrowLeft, Settings2, ShieldCheck, Zap } from 'lucide-react';
+import { Youtube, Download, Music, Video, AlertCircle, CheckCircle2, Loader2, ArrowLeft, ShieldCheck, Zap } from 'lucide-react';
+
 
 const YoutubeDownloader = ({ onBack }) => {
     const [url, setUrl] = useState('');
