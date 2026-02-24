@@ -25,6 +25,8 @@ import SalaryCalculator from './components/SalaryCalculator';
 import Services from './components/Services';
 import ExpenseTracker from './components/ExpenseTracker';
 import ColorPalette from './components/ColorPalette';
+import YoutubeDownloader from './components/YoutubeDownloader';
+
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -65,7 +67,9 @@ function App() {
                         <Route path="/expense" element={<ExpenseTrackerWrapper />} />
                         <Route path="/colors" element={<ColorPaletteWrapper />} />
                         <Route path="/services" element={<ServicesWrapper />} />
+                        <Route path="/youtube" element={<YoutubeDownloaderWrapper />} />
                         <Route path="/about" element={<AboutWrapper />} />
+
                         <Route path="/privacy" element={<LegalWrapper type="privacy" />} />
                         <Route path="/terms" element={<LegalWrapper type="terms" />} />
                         <Route path="*" element={<MenuWrapper />} />
@@ -198,6 +202,12 @@ const AboutWrapper = () => {
     const navigate = useNavigate();
     return <About onBack={() => navigate('/')} />;
 };
+
+const YoutubeDownloaderWrapper = () => {
+    const navigate = useNavigate();
+    return <YoutubeDownloader onBack={() => navigate('/')} />;
+};
+
 
 const Footer = () => {
     return (

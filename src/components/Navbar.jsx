@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, Shield, DollarSign, Briefcase, Receipt, Droplets } from 'lucide-react';
+import { Hammer, BookOpen, Menu, X, Home, ChevronDown, BarChart2, Users, LayoutGrid, Terminal, QrCode, FileCode, Camera, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, Shield, DollarSign, Briefcase, Receipt, Droplets, Youtube } from 'lucide-react';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -179,7 +180,11 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                                         <div onClick={() => handleToolSelect('/image')} className="dropdown-item">
                                             <Camera size={18} className="text-pink-500" /> Pixel Studio
                                         </div>
+                                        <div onClick={() => handleToolSelect('/youtube')} className="dropdown-item">
+                                            <Youtube size={18} className="text-red-500" /> YouTube Downloader <span className="new-badge">NEW</span>
+                                        </div>
                                         <div onClick={() => handleToolSelect('/utm')} className="dropdown-item">
+
                                             <Megaphone size={18} className="text-orange-400" /> UTM Architect
                                         </div>
                                         <div onClick={() => handleToolSelect('/markdown')} className="dropdown-item">
@@ -253,7 +258,9 @@ const Navbar = ({ onHome, onBlog, activePath }) => {
                             <button onClick={() => handleToolSelect('/qr')} className="mobile-item"><QrCode size={20} /> Smart QR Studio</button>
                             <button onClick={() => handleToolSelect('/converter')} className="mobile-item"><FileCode size={20} /> Converter</button>
                             <button onClick={() => handleToolSelect('/image')} className="mobile-item"><Camera size={20} /> Pixel Studio</button>
+                            <button onClick={() => handleToolSelect('/youtube')} className="mobile-item"><Youtube size={20} /> YouTube Downloader</button>
                             <button onClick={() => handleToolSelect('/utm')} className="mobile-item"><Megaphone size={20} /> UTM Architect</button>
+
                             <button onClick={() => handleToolSelect('/markdown')} className="mobile-item"><FileText size={20} /> Markdown Pro</button>
                             <button onClick={() => handleToolSelect('/pomodoro')} className="mobile-item"><Timer size={20} /> Pomodoro Tracker</button>
                             <button onClick={() => handleToolSelect('/meeting')} className="mobile-item"><Target size={20} /> Meeting Architect</button>

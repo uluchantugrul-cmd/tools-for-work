@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, DollarSign, Receipt, Droplets } from 'lucide-react';
+import { BarChart2, FileCode, QrCode, ArrowRight, Zap, Shield, Globe, Camera, LayoutGrid, Users, Terminal, Megaphone, FileText, Timer, Target, Clock, TrendingUp, Search, DollarSign, Receipt, Droplets, Youtube } from 'lucide-react';
+
 
 const projectTools = [
   {
@@ -167,8 +168,18 @@ const utilityTools = [
     icon: <Droplets size={32} />,
     color1: '#ec4899',
     color2: '#8b5cf6'
+  },
+  {
+    id: 'youtube',
+    name: 'YouTube Downloader',
+    category: 'Media',
+    description: 'High-quality YouTube video and audio downloader. Ad-free, fast, and secure.',
+    icon: <Youtube size={32} />,
+    color1: '#FF0000',
+    color2: '#FF4D4D'
   }
 ];
+
 
 const faqs = [
   {
@@ -194,8 +205,9 @@ const Menu = ({ onSelectTool }) => {
           animate={{ opacity: 1, scale: 1 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '100px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', border: '1px solid rgba(99, 102, 241, 0.2)' }}
         >
-          <Zap size={14} /> NEW: SALARY CALCULATOR & PASSWORD GEN ADDED
+          <Zap size={14} /> NEW: YOUTUBE DOWNLOADER ADDED
         </motion.div>
+
         <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: 900, marginBottom: '24px', background: 'linear-gradient(to bottom, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-2px' }}>
           Tools for Work
         </h1>
