@@ -6,37 +6,44 @@ export default async function handler(req, res) {
     const instances = [
         'https://cobalt.shaka.video',
         'https://co.wuk.sh',
-        'https://api.cobalt.tools',
-        'https://cobalt-api.zeat.me'
+        'https://cobalt.perv.it',
+        'https://api.cobalt.tools'
     ];
 
     let lastError = null;
 
     for (const instance of instances) {
         try {
-            const response = await fetch(`${instance}/api/json`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(req.body)
-            });
+            // Try both root / and /api/json as different instances have different setups
+            const endpoints = ['/api/json', '/'];
 
-            if (!response.ok) {
-                continue;
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(`${instance}${endpoint}`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                        },
+                        body: JSON.stringify(req.body)
+                    });
+
+                    if (!response.ok) continue;
+
+                    const data = await response.json();
+
+                    if (data.status !== 'error') {
+                        return res.status(200).json(data);
+                    }
+                    lastError = data.text || 'Instance error';
+                } catch (innerErr) {
+                    lastError = innerErr.message;
+                    continue;
+                }
             }
-
-            const data = await response.json();
-
-            if (data.status !== 'error') {
-                return res.status(200).json(data);
-            }
-
-            lastError = data.text || 'Instance error';
         } catch (err) {
             lastError = err.message;
-            console.error(`Proxy error for ${instance}:`, err);
         }
     }
 
