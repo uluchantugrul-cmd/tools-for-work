@@ -4,11 +4,9 @@ export default async function handler(req, res) {
     }
 
     const instances = [
-        'https://co.wuk.sh',
         'https://cobalt.shaka.video',
-        'https://cobalt.instavids.net',
-        'https://cobalt-api.zeat.me',
-        'https://api.cobalt.tools'
+        'https://co.wuk.sh',
+        'https://cobalt.smst.xyz'
     ];
 
     let lastError = null;
@@ -16,7 +14,7 @@ export default async function handler(req, res) {
     for (const instance of instances) {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3500);
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
 
             const response = await fetch(`${instance}/api/json`, {
                 method: 'POST',
@@ -24,17 +22,21 @@ export default async function handler(req, res) {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Origin': instance,
-                    'Referer': instance + '/',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
                 },
-                body: JSON.stringify(req.body)
+                body: JSON.stringify({
+                    url: req.body.url,
+                    videoQuality: req.body.videoQuality,
+                    audioFormat: 'mp3',
+                    isAudioOnly: req.body.isAudioOnly,
+                    downloadMode: 'auto'
+                })
             });
 
             clearTimeout(timeoutId);
 
             if (!response.ok) {
-                lastError = `Server ${instance} reported ${response.status}`;
+                lastError = `Server ${instance} status ${response.status}`;
                 continue;
             }
 
@@ -43,10 +45,9 @@ export default async function handler(req, res) {
             if (data.status !== 'error') {
                 return res.status(200).json(data);
             }
-            lastError = data.text || 'Instance reported an error';
+            lastError = data.text || 'Instance error';
         } catch (err) {
-            lastError = err.name === 'AbortError' ? `Timeout on ${instance}` : err.message;
-            console.warn(`Proxy fail for ${instance}:`, lastError);
+            lastError = err.name === 'AbortError' ? `Busy node: ${instance}` : err.message;
             continue;
         }
     }
