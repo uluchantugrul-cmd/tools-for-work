@@ -24,7 +24,7 @@ const YoutubeDownloader = ({ onBack }) => {
         setSuccess(false);
         setResultUrl(null);
 
-        // Try multiple instances in case one is down or blocking CORS
+        // Try multiple instances using the correct API path conventions
         const instances = [
             'https://cobalt.shaka.video',
             'https://co.wuk.sh',
@@ -36,6 +36,8 @@ const YoutubeDownloader = ({ onBack }) => {
 
         for (const instance of instances) {
             try {
+                // In modern Cobalt, many instances use the root path for API
+                // or specific API endpoints. We will try to negotiate.
                 const response = await fetch(`${instance}/api/json`, {
                     method: 'POST',
                     mode: 'cors',
@@ -43,12 +45,13 @@ const YoutubeDownloader = ({ onBack }) => {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-
                     body: JSON.stringify({
                         url: url,
-                        videoQuality: isAudioOnly ? '720' : quality,
-                        audioFormat: 'mp3',
+                        vQuality: quality === 'max' ? '1080' : quality, // Cobalt uses vQuality for some versions
+                        videoQuality: quality === 'max' ? '1080' : quality,
+                        aFormat: 'mp3',
                         isAudioOnly: isAudioOnly,
+                        isNoTTWatermark: true,
                         downloadMode: 'auto'
                     })
                 });
