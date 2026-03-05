@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, DollarSign, Briefcase, Calendar, Clock } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { ArrowLeft, DollarSign, Briefcase, Calendar, Clock, Share2, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SalaryCalculator = ({ onBack }) => {
-    const [amount, setAmount] = useState(100000);
-    const [period, setPeriod] = useState('year'); // year, month, hour
-    const [hoursPerWeek, setHoursPerWeek] = useState(40);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    // Calculated values
+    // Initialize from URL or defaults
+    const [amount, setAmount] = useState(searchParams.get('amt') || 100000);
+    const [period, setPeriod] = useState(searchParams.get('per') || 'year');
+    const [hoursPerWeek, setHoursPerWeek] = useState(searchParams.get('hrs') || 40);
     const [annual, setAnnual] = useState(0);
+    const [showCopySuccess, setShowCopySuccess] = useState(false);
+
+    // Sync state to URL
+    useEffect(() => {
+        const params = {};
+        if (amount) params.amt = amount;
+        if (period) params.per = period;
+        if (hoursPerWeek) params.hrs = hoursPerWeek;
+        setSearchParams(params, { replace: true });
+    }, [amount, period, hoursPerWeek, setSearchParams]);
 
     useEffect(() => {
         let yearly = 0;
@@ -29,6 +42,12 @@ const SalaryCalculator = ({ onBack }) => {
         setAnnual(yearly);
     }, [amount, period, hoursPerWeek]);
 
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setShowCopySuccess(true);
+        setTimeout(() => setShowCopySuccess(false), 2000);
+    };
+
     const formatCurrency = (val) => {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
     };
@@ -38,15 +57,54 @@ const SalaryCalculator = ({ onBack }) => {
         { label: 'Monthly', value: annual / 12, icon: Calendar },
         { label: 'Bi-Weekly', value: annual / 26, icon: Calendar },
         { label: 'Weekly', value: annual / 52, icon: Calendar },
-        { label: 'Daily', value: annual / 260, icon: Calendar }, // Assuming 5 days a week * 52 weeks
+        { label: 'Daily', value: annual / 260, icon: Calendar },
         { label: 'Hourly', value: annual / (hoursPerWeek * 52), icon: Clock },
     ];
 
     return (
         <div className="container animate-fade-in" style={{ paddingTop: '40px', paddingBottom: '80px' }}>
-            <button onClick={onBack} className="button-secondary" style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ArrowLeft size={18} /> Back to Menu
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                <button onClick={onBack} className="button-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <ArrowLeft size={18} /> Back to Menu
+                </button>
+
+                <button
+                    onClick={handleShare}
+                    className="button-primary"
+                    style={{
+                        padding: '10px 20px',
+                        fontSize: '0.9rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        position: 'relative'
+                    }}
+                >
+                    <AnimatePresence mode="wait">
+                        {showCopySuccess ? (
+                            <motion.div
+                                key="check"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                            >
+                                <Check size={18} /> Copied!
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="share"
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
+                                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                            >
+                                <Share2 size={18} /> Share Calculation
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </button>
+            </div>
 
             <div className="glass-panel" style={{ padding: '40px', maxWidth: '900px', margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -61,10 +119,11 @@ const SalaryCalculator = ({ onBack }) => {
                     {/* Input Section */}
                     <div>
                         <div style={{ marginBottom: '24px' }}>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Amount</label>
+                            <label htmlFor="amount-input" style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Amount</label>
                             <div style={{ position: 'relative' }}>
                                 <DollarSign size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                                 <input
+                                    id="amount-input"
                                     type="number"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
@@ -109,10 +168,11 @@ const SalaryCalculator = ({ onBack }) => {
                         </div>
 
                         <div style={{ marginBottom: '24px' }}>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Hours per Week</label>
+                            <label htmlFor="hours-input" style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Hours per Week</label>
                             <div style={{ position: 'relative' }}>
                                 <Briefcase size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                                 <input
+                                    id="hours-input"
                                     type="number"
                                     value={hoursPerWeek}
                                     onChange={(e) => setHoursPerWeek(e.target.value)}
